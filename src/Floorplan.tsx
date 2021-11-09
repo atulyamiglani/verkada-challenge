@@ -1,78 +1,42 @@
-import { data } from "./data.json";
-import styled from "styled-components";
 import { CellState } from "./Cell";
 import Cell from "./Cell";
-import { Button } from "@chakra-ui/button";
-import { Grid, Box, GridItem, SimpleGrid } from "@chakra-ui/layout";
+import { DndProvider } from "react-dnd";
+import { Grid, GridItem } from "@chakra-ui/layout";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
-const Row = styled.div`
-  display: flex;
-  border-bottom: 2px solid grey;
-`;
-
-const Col = styled.div`
-  flex: ${(props: ColProps) => props.size};
-  border-right: 2px solid grey;
-`;
-
-interface ColProps {
-  size: number;
+interface FloorplanProps {
+  grid: number[][];
 }
 
-/**
- * 
- *  {grid.map((row, rowIdx) => (
-          <Row>
-            {row.map((cell, colIdx) => (
-              <Box
-                boxShadow="xs"
-                p="6"
-                rounded="md"
-                bg="white"
-                gridColumn={grid.length}
-              >
+export const Floorplan: React.FC<FloorplanProps> = ({ grid }) => {
+  return (
+    <div>
+      <DndProvider backend={HTML5Backend}>
+        <Grid
+          h="200px"
+          alignSelf="center"
+          templateRows="repeat(10, 1fr)"
+          templateColumns="repeat(10, 1fr)"
+          gridAutoFlow="row"
+          w="100%"
+          gap={4}
+        >
+          {grid.map((row, rowIdx) => (
+            <GridItem key={`${rowIdx} `}>
+              {row.map((cell, colIdx) => (
                 <Cell
+                  key={`${rowIdx} ${colIdx}`}
                   row={rowIdx}
                   col={colIdx}
                   state={
                     grid[rowIdx][colIdx] === 1 ? CellState.WALL : CellState.OPEN
                   }
                 />
-              </Box>
-            ))}
-          </Row>
-        ))}
- */
-export const Floorplan: React.FC<{}> = () => {
-  const grid = data.floorplan;
-  return (
-    <>
-      <Grid
-        h="200px"
-        templateRows="repeat(10, 1fr)"
-        templateColumns="repeat(10, 1fr)"
-        gridAutoFlow="row"
-        w="100%"
-        gap={4}
-      >
-        {grid.map((row, rowIdx) => (
-          <GridItem>
-            {row.map((cell, colIdx) => (
-              <Cell
-                row={rowIdx}
-                col={colIdx}
-                state={
-                  grid[rowIdx][colIdx] === 1 ? CellState.WALL : CellState.OPEN
-                }
-              />
-            ))}
-          </GridItem>
-        ))}
-      </Grid>
-
-      <div>
-        <Button>Submit Plan</Button>
-      </div>
-    </>
+              ))}
+            </GridItem>
+          ))}
+        </Grid>
+      </DndProvider>
+    </div>
   );
 };

@@ -1,12 +1,10 @@
-import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { Floorplan } from "./Floorplan";
 import { ChakraProvider } from "@chakra-ui/react";
+import FloorPlanPage from "./FloorPlanPage";
 function App() {
   return (
     <ChakraProvider>
-      <Floorplan />
+      <FloorPlanPage />
     </ChakraProvider>
   );
 }
