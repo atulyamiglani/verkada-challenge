@@ -1,5 +1,4 @@
 import { Box, Text } from "@chakra-ui/layout";
-import { useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
 
 export enum CellState {
@@ -8,17 +7,20 @@ export enum CellState {
   CAMERA = "camera",
 }
 
-export interface CellProps {
+export interface CellType {
   row: number;
   col: number;
   state: CellState;
 }
 
-const Cell: React.FC<CellProps> = (cell: CellProps) => {
-  const [currCell, setCell] = useState(cell);
+type CellProps = {
+  currCell: CellType;
+  setCell: (cell: CellType) => void;
+};
+
+export const Cell: React.FC<CellProps> = ({ currCell, setCell }) => {
   const { row, col, state } = currCell;
   const handleClick = () => {
-    console.log(`Clicked on ${row + 1}, ${col + 1}`);
     if (state === CellState.OPEN) {
       setCell({ ...currCell, state: CellState.CAMERA });
     }
